@@ -1,10 +1,11 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
+import { env } from "./environment";
 
 // khởi tạo một đối tượng trelloDatabaseInstance
 let trellodbInstance = null;
 
 // khởi tạo một đối tượng mongoClientInstance để kết nối tới mongodb
-const mongoClientInstance = new MongoClient(process.env.MONGODB_URI, {
+const mongoClientInstance = new MongoClient(env.MONGODB_URI, {
   serverApi: {
     version: ServerApiVersion.v1,
     strict: true,
@@ -15,7 +16,7 @@ const mongoClientInstance = new MongoClient(process.env.MONGODB_URI, {
 export const CONNECT_DB = async () => {
   await mongoClientInstance.connect();
 
-  trellodbInstance = mongoClientInstance.db(process.env.DATABASE_NAME);
+  trellodbInstance = mongoClientInstance.db(env.DATABASE_NAME);
 };
 
 export const GET_DB = () => {
