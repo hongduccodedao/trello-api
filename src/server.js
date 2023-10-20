@@ -1,8 +1,9 @@
 // eslint-disable-next-line no-console
 
 import express from "express";
+import exitHook from "async-exit-hook";
 import "dotenv/config";
-import { CONNECT_DB, GET_DB } from "~/config/mongodb.js";
+import { CLOSE_DB, CONNECT_DB } from "~/config/mongodb.js";
 
 const START_SERVER = async () => {
   const app = express();
@@ -15,7 +16,14 @@ const START_SERVER = async () => {
   });
 
   app.listen(port, hostname, () => {
-    console.log(`3. Back-end Server is running successfully at ${hostname}:${port}/`);
+    console.log(
+      `3. Back-end Server is running successfully at ${hostname}:${port}/`
+    );
+  });
+
+  exitHook(async () => {
+    await CLOSE_DB();
+    console.log("4. Disconnected successfully from MongoDB server");
   });
 };
 
@@ -29,4 +37,4 @@ const START_SERVER = async () => {
     console.log("2. Connect failure to MongoDB server" + error);
     process.exit(0);
   }
-})()
+})();
